@@ -19,7 +19,7 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{
     attribution: "© harsh"
 }).addTo(map);
 
-const markers =[];
+const markers = {};
 
 socket.on("receive-location", (data)=> {
     const {id,latitude,longitude}=data;
@@ -31,3 +31,10 @@ socket.on("receive-location", (data)=> {
         markers[id] = marker;
     }
 }) 
+
+socket.on("user-disconnected", (id) => {
+    if(markers[id]){
+        map.removeLayer(markers[id]);
+        delete markers[id];
+    }
+})
